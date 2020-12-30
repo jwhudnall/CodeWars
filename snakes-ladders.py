@@ -50,7 +50,6 @@ class SnakesLadders():
             update_square(new_position, current_player)
 
             if new_position == 100:
-                update_square(new_position, current_player) # Remove?
                 return winner()
 
             if new_position > 100:
