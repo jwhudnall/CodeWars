@@ -17,19 +17,18 @@ class SnakesLadders():
         self.current_turn = 1 if self.player_turn == 1 else 2
         self.same_dice = self.die1 == self.die2
         self.roll = die1 + die2
+        current_player = self.current_turn
         
         def get_new_position(roll):
             previous_square = self.p1_square if self.player_turn == 1 else self.p2_square
             return previous_square + roll
         
-        def update_p1_square(new_position):
-            self.p1_square = new_position
-        
-        def update_p2_square(new_position):
-            self.p2_square = new_position
-
-        def update_square(current_player, new_position):
-            return update_p1_square(new_position) if self.current_turn == 1 else update_p2_square(new_position)
+        def update_square(new_position, current_player):
+            current_player = self.current_turn
+            if current_player == 1:
+                self.p1_square = new_position
+            elif current_player == 2:
+                self.p2_square = new_position
         
         def switch_player():
             if self.current_turn == 1:
@@ -48,32 +47,31 @@ class SnakesLadders():
         
         if not self.gameover:
             new_position = get_new_position(self.roll)
-            update_p1_square(new_position) if self.current_turn == 1 else update_p2_square(new_position)
-
+            update_square(new_position, current_player)
 
             if new_position == 100:
-                update_square(self.current_turn, new_position)
+                update_square(new_position, current_player) # Remove?
                 return winner()
 
             if new_position > 100:
                 new_position = 100 - (new_position - 100)
                 print(f'You passed 100! Your new position is {new_position}')
-                update_square(self.current_turn, new_position)
+                update_square(new_position, current_player)
 
             if new_position in self.ladders_dict:
                 print(f'You hit a ladder at position {new_position}')
                 new_position = self.ladders_dict[new_position]
                 print(f'Player {self.current_turn}, your new position is: {new_position}')
-                update_square(self.current_turn, new_position)
+                update_square(new_position, current_player)
 
             elif new_position in self.snakes_dict:
                 print(f'You hit a snake at position {new_position}')
                 new_position = self.snakes_dict[new_position]
                 print(f'Player {self.current_turn}, your new position is {new_position}')
-                update_square(self.current_turn, new_position)
+                update_square(new_position, current_player)
 
             else:
-                update_square(self.current_turn, new_position)
+                update_square(new_position, current_player)
 
             if not self.same_dice:
                 switch_player()
